@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  mongodb:
+    container_name: chat-mongodb
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=username
+      - MONGO_INITDB_ROOT_PASSWORD=shhh
+    volumes:
+      - mongodb_data_container:/data/db
+
+  localstack:
+    container_name: chat-localstack
+    image: localstack/localstack
+    environment:
+      - HOSTNAME_EXTERNAL=localstack
+      - LOCALSTACK_HOSTNAME=localstack
+      - SERVICES=sqs:4566,sns:4567
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOST_TMP_FOLDER=${TMPDIR}
+      - AWS_ACCESS_KEY_ID=***
+      - AWS_SECRET_ACCESS_KEY=***
+      - AWS_DEFAULT_REGION=us-west-1
+
+    volumes:
+      - ./data:/tmp/localstack
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+    ports:
+      - "4566:4566"
+      - "4567:4567"
+
+volumes:
+  mongodb_data_container:
