@@ -10,8 +10,14 @@ import com.napfernandes.chat.login.dto.GenerateTokenInput;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Service
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
     @Value("${jwt.secret}")
@@ -38,5 +44,4 @@ public class TokenServiceImpl implements TokenService {
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
-
 }

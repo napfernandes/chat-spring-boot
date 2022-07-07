@@ -5,13 +5,11 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Data
+@AllArgsConstructor
 public class GenerateTokenInput {
 
     @NotNull
@@ -30,10 +28,5 @@ public class GenerateTokenInput {
         this();
         this.userId = userId;
         this.subject = subject;
-    }
-
-    public GenerateTokenInput(String userId, String subject, Map<String, Object> claims) {
-        this(userId, subject);
-        this.claims = claims;
     }
 }
