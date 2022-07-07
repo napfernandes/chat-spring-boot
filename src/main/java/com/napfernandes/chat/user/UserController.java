@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.napfernandes.chat.crypto.exception.RandomValueNumberOfBytesException;
 import com.napfernandes.chat.user.dto.UserInput;
 import com.napfernandes.chat.user.dto.UserOutput;
 import com.napfernandes.chat.user.exception.UserAlreadyExistsException;
@@ -24,7 +25,8 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public UserOutput insertUser(@RequestBody UserInput userInput) throws UserAlreadyExistsException {
+    public UserOutput insertUser(@RequestBody UserInput userInput)
+            throws RandomValueNumberOfBytesException, UserAlreadyExistsException {
         return this.userService.insertUser(userInput);
     }
 }

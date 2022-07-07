@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.napfernandes.chat.crypto.CryptoService;
+import com.napfernandes.chat.crypto.exception.RandomValueNumberOfBytesException;
 import com.napfernandes.chat.service.ValidatorService;
 import com.napfernandes.chat.user.dto.UserInput;
 import com.napfernandes.chat.user.dto.UserOutput;
@@ -38,22 +39,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserOutput insertUser(UserInput input) throws UserAlreadyExistsException {
+    public UserOutput insertUser(UserInput input) throws RandomValueNumberOfBytesException, UserAlreadyExistsException {
         this.userInputValidator.validate(input);
 
-        User user = this.modelMapper.map(input, User.class);
+        User existingUser = userRepository.getByEmail(input.getEmail());
+        if (existingUser != null) {
+            throw new UserAlreadyExistsException(input.getEmail());
+        }
 
+        User user = this.modelMapper.map(input, User.class);
         String salt = this.cryptoService.generateRandomValue(32);
         String hashedPassword = this.cryptoService.hashValue(input.getPassword(), salt);
 
         user.setSalt(salt);
         user.setPassword(hashedPassword);
         user.setCreatedAt(new Date());
-
-        User existingUser = userRepository.getByEmail(user.getEmail());
-        if (existingUser != null) {
-            throw new UserAlreadyExistsException(user.getEmail());
-        }
 
         userRepository.insert(user);
 

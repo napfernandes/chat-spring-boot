@@ -6,14 +6,20 @@ import java.security.SecureRandom;
 
 import org.springframework.stereotype.Service;
 
+import com.napfernandes.chat.crypto.exception.RandomValueNumberOfBytesException;
+
 @Service
 public class CryptoServiceImpl implements CryptoService {
     @Override
-    public String generateRandomValue(int number) {
+    public String generateRandomValue(int numberOfBytes) throws RandomValueNumberOfBytesException {
         final StringBuilder stringBuilder = new StringBuilder();
 
+        if (numberOfBytes <= 0) {
+            throw new RandomValueNumberOfBytesException(numberOfBytes);
+        }
+
         try {
-            byte[] saltBytes = new byte[number];
+            byte[] saltBytes = new byte[numberOfBytes];
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
 
             secureRandom.nextBytes(saltBytes);
