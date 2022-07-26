@@ -1,6 +1,6 @@
 package com.napfernandes.chat.user;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         user.setSalt(salt);
         user.setPassword(hashedPassword);
-        user.setCreatedAt(new Date());
+        user.setCreatedAt(LocalDateTime.now());
 
         userRepository.insert(user);
 

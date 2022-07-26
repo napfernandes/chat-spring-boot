@@ -1,6 +1,6 @@
 package com.napfernandes.chat.conversation;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ConversationRepositoryImpl implements ConversationRepositoryCustom 
     public ConversationMessage insertMessageToConversation(String conversationId,
             ConversationMessage message) {
 
-        message.setCreatedAt(new Date());
+        message.setCreatedAt(LocalDateTime.now());
         message.setId(new ObjectId().toHexString());
 
         Criteria criteria = Criteria.where("_id").is(conversationId);
@@ -38,7 +38,7 @@ public class ConversationRepositoryImpl implements ConversationRepositoryCustom 
     @Override
     public MessageAction insertActionToMessage(String conversationId, String messageId, MessageAction action) {
 
-        action.setCreatedAt(new Date());
+        action.setCreatedAt(LocalDateTime.now());
 
         Criteria criteria = Criteria.where("_id").is(conversationId);
         Query query = new Query(criteria);
