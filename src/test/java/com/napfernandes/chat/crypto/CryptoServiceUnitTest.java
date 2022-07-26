@@ -3,12 +3,15 @@ package com.napfernandes.chat.crypto;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.napfernandes.chat.UnitTest;
 import com.napfernandes.chat.crypto.exception.RandomValueNumberOfBytesException;
 
+@Category(UnitTest.class)
 public class CryptoServiceUnitTest {
 
     private CryptoService cryptoService;

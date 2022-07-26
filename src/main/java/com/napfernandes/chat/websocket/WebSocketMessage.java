@@ -1,6 +1,6 @@
 package com.napfernandes.chat.websocket;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,5 +15,5 @@ public class WebSocketMessage {
     private String from;
     private String to;
     private String content;
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }

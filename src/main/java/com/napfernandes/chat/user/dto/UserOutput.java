@@ -1,6 +1,6 @@
 package com.napfernandes.chat.user.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +14,6 @@ import lombok.Setter;
 public class UserOutput {
     private String id;
     private String email;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

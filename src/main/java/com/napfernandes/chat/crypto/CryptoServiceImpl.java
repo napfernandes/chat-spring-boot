@@ -36,6 +36,11 @@ public class CryptoServiceImpl implements CryptoService {
     }
 
     @Override
+    public String hashValue(String stringValue) {
+        return this.hashValue(stringValue, null);
+    }
+
+    @Override
     public String hashValue(String stringValue, String hashString) {
         final StringBuilder stringBuilder = new StringBuilder();
 

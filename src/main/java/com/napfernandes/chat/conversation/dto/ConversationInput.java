@@ -2,9 +2,8 @@ package com.napfernandes.chat.conversation.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.napfernandes.chat.conversation.enums.ConversationType;
 
@@ -16,8 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConversationInput {
-    @Min(2)
-    @NotEmpty
+    @Size(min = 2)
+    @NotNull
     private List<String> members;
 
     @NotNull

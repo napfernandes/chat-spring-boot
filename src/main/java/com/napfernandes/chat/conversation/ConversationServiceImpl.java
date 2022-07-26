@@ -22,6 +22,8 @@ import com.napfernandes.chat.conversation.exception.ConversationNotFoundExceptio
 import com.napfernandes.chat.crypto.CryptoService;
 import com.napfernandes.chat.service.ValidatorService;
 
+import lombok.var;
+
 @Service
 public class ConversationServiceImpl implements ConversationService {
 
@@ -67,12 +69,10 @@ public class ConversationServiceImpl implements ConversationService {
     public ConversationOutput insertConversation(ConversationInput input) {
         this.conversationInputValidator.validate(input);
 
-        Conversation conversation = this.modelMapper.map(input, Conversation.class);
+        var conversation = this.modelMapper.map(input, Conversation.class);
+        var formattedString = cryptoService.hashValue(String.join(",", conversation.getMembers()));
 
-        String formattedString = "conversation#%s#%s".formatted(
-                String.join(",", conversation.getMembers()),
-                new Date().getTime());
-        String conversationHash = this.cryptoService.hashValue(formattedString, null);
+        var conversationHash = this.cryptoService.hashValue(formattedString, null);
 
         conversation.setHash(conversationHash);
         conversation.setCreatedAt(new Date());

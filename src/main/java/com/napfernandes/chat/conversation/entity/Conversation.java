@@ -1,7 +1,7 @@
 package com.napfernandes.chat.conversation.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -19,11 +19,12 @@ public class Conversation {
 
     @Id
     private String id;
+
     private List<String> members;
     private ConversationType type;
     private String hash;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private List<ConversationMessage> messages;
 
     public Conversation() {

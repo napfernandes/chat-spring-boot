@@ -1,7 +1,7 @@
 package com.napfernandes.chat.conversation.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -18,8 +18,8 @@ public class ConversationMessage {
     private String userId;
     private String message;
     private List<MessageAction> actions;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public ConversationMessage() {
         this.actions = new ArrayList<>();

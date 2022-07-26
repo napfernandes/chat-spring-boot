@@ -1,6 +1,6 @@
 package com.napfernandes.chat.conversation.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.napfernandes.chat.conversation.enums.MessageActionType;
 
@@ -15,5 +15,5 @@ public class MessageAction {
     private String userId;
 
     private MessageActionType actionType;
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }

@@ -94,6 +94,21 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>UnitTests</id>
+			<properties>
+				<testcase.groups>java.com.napfernandes.chat.UnitTest</testcase.groups>
+			</properties>
+		</profile>
+		<profile>
+			<id>IntegrationTests</id>
+			<properties>
+				<testcase.groups>java.com.napfernandes.chat.IntegrationTest</testcase.groups>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>

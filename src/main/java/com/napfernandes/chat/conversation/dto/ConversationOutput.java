@@ -1,6 +1,6 @@
 package com.napfernandes.chat.conversation.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.napfernandes.chat.conversation.enums.ConversationType;
@@ -17,6 +17,6 @@ public class ConversationOutput {
     private List<String> members;
     private ConversationType type;
     private String hash;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
