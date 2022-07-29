@@ -1,6 +1,5 @@
 package com.napfernandes.chat.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
@@ -12,11 +11,13 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 @Configuration
 public class MongoConfig {
-    @Autowired
-    private MongoMappingContext mongoMappingContext;
+    private final MongoMappingContext mongoMappingContext;
+    private final MongoDatabaseFactory mongoDatabaseFactory;
 
-    @Autowired
-    private MongoDatabaseFactory mongoDatabaseFactory;
+    public MongoConfig(MongoMappingContext mongoMappingContext, MongoDatabaseFactory mongoDatabaseFactory) {
+        this.mongoMappingContext = mongoMappingContext;
+        this.mongoDatabaseFactory = mongoDatabaseFactory;
+    }
 
     @Bean
     public MappingMongoConverter mappingMongoConverter() {

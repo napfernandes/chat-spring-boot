@@ -6,13 +6,15 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ValidatorServiceImpl<T> implements ValidatorService<T> {
-    @Autowired
-    private Validator validator;
+    private final Validator validator;
+
+    public ValidatorServiceImpl(Validator validator) {
+        this.validator = validator;
+    }
 
     @Override
     public boolean validate(T objectToValidate) {

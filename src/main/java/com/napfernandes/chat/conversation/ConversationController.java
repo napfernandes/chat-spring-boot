@@ -2,7 +2,6 @@ package com.napfernandes.chat.conversation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +18,11 @@ import com.napfernandes.chat.conversation.dto.message.ConversationMessageInput;
 
 @RestController
 public class ConversationController {
+    private final ConversationService conversationService;
 
-    @Autowired
-    private ConversationService conversationService;
+    public ConversationController(ConversationService conversationService) {
+        this.conversationService = conversationService;
+    }
 
     @GetMapping("/conversations")
     public List<ConversationOutput> findAllConversations() {

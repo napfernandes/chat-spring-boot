@@ -3,7 +3,6 @@ package com.napfernandes.chat.conversation;
 import java.time.LocalDateTime;
 
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,9 +13,11 @@ import com.napfernandes.chat.conversation.entity.ConversationMessage;
 import com.napfernandes.chat.conversation.entity.MessageAction;
 
 public class ConversationRepositoryImpl implements ConversationRepositoryCustom {
+    private final MongoTemplate mongoTemplate;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    public ConversationRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @Override
     public ConversationMessage insertMessageToConversation(String conversationId,

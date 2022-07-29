@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.napfernandes.chat.crypto.CryptoService;
@@ -17,18 +16,21 @@ import com.napfernandes.chat.user.exception.UserAlreadyExistsException;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final ModelMapper modelMapper;
+    private final CryptoService cryptoService;
+    private final UserRepository userRepository;
+    private final ValidatorService<UserInput> userInputValidator;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CryptoService cryptoService;
-
-    @Autowired
-    private ValidatorService<UserInput> userInputValidator;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    public UserServiceImpl(
+            ModelMapper modelMapper,
+            CryptoService cryptoService,
+            UserRepository userRepository,
+            ValidatorService<UserInput> userInputValidator) {
+        this.modelMapper = modelMapper;
+        this.cryptoService = cryptoService;
+        this.userRepository = userRepository;
+        this.userInputValidator = userInputValidator;
+    }
 
     @Override
     public List<UserOutput> findAllUsers() {

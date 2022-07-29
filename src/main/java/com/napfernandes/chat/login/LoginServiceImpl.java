@@ -3,7 +3,6 @@ package com.napfernandes.chat.login;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.napfernandes.chat.crypto.CryptoService;
@@ -18,18 +17,21 @@ import com.napfernandes.chat.user.UserRepository;
 
 @Service
 public class LoginServiceImpl implements LoginService {
+    private final TokenService tokenService;
+    private final CryptoService cryptoService;
+    private final UserRepository userRepository;
+    private final ValidatorService<LoginInput> loginInputValidator;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CryptoService cryptoService;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private ValidatorService<LoginInput> loginInputValidator;
+    public LoginServiceImpl(
+            TokenService tokenService,
+            CryptoService cryptoService,
+            UserRepository userRepository,
+            ValidatorService<LoginInput> loginInputValidator) {
+        this.tokenService = tokenService;
+        this.cryptoService = cryptoService;
+        this.userRepository = userRepository;
+        this.loginInputValidator = loginInputValidator;
+    }
 
     @Override
     public LoginOutput loginWithCredentials(LoginInput input) throws InvalidCredentialsException {

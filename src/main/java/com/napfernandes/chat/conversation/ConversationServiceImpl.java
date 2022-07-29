@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.napfernandes.chat.conversation.dto.ConversationInput;
@@ -27,23 +26,27 @@ import lombok.var;
 @Service
 public class ConversationServiceImpl implements ConversationService {
 
-    @Autowired
-    private ConversationRepository conversationRepository;
+    private final ModelMapper modelMapper;
+    private final CryptoService cryptoService;
+    private final ConversationRepository conversationRepository;
+    private final ValidatorService<MessageActionInput> actionInputValidator;
+    private final ValidatorService<ConversationInput> conversationInputValidator;
+    private final ValidatorService<ConversationMessageInput> messageInputValidator;
 
-    @Autowired
-    private CryptoService cryptoService;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private ValidatorService<ConversationInput> conversationInputValidator;
-
-    @Autowired
-    private ValidatorService<ConversationMessageInput> messageInputValidator;
-
-    @Autowired
-    private ValidatorService<MessageActionInput> actionInputValidator;
+    public ConversationServiceImpl(
+            ModelMapper modelMapper,
+            CryptoService cryptoService,
+            ConversationRepository conversationRepository,
+            ValidatorService<MessageActionInput> actionInputValidator,
+            ValidatorService<ConversationInput> conversationInputValidator,
+            ValidatorService<ConversationMessageInput> messageInputValidator) {
+        this.modelMapper = modelMapper;
+        this.cryptoService = cryptoService;
+        this.actionInputValidator = actionInputValidator;
+        this.messageInputValidator = messageInputValidator;
+        this.conversationRepository = conversationRepository;
+        this.conversationInputValidator = conversationInputValidator;
+    }
 
     @Override
     public List<ConversationOutput> findAllConversations() {

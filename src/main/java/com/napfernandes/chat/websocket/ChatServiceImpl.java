@@ -5,17 +5,15 @@ import com.napfernandes.chat.conversation.dto.message.ConversationMessageInput;
 import com.napfernandes.chat.conversation.enums.MessageActionType;
 import com.napfernandes.chat.conversation.exception.ConversationNotFoundException;
 
-import java.time.format.DateTimeFormatter;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ChatServiceImpl implements ChatService {
-        @Autowired
-        private ConversationService conversationService;
+        private final ConversationService conversationService;
 
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        public ChatServiceImpl(ConversationService conversationService) {
+                this.conversationService = conversationService;
+        }
 
         @Override
         public WebSocketMessage sendMessageToConversation(String conversationId, WebSocketMessage message)

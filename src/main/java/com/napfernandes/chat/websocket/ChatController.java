@@ -1,8 +1,5 @@
 package com.napfernandes.chat.websocket;
 
-import java.security.Principal;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -15,16 +12,19 @@ import com.google.gson.Gson;
 
 @Controller
 public class ChatController {
+    private final Gson gson;
+    private final ChatService chatService;
 
-    @Autowired
-    private ChatService chatService;
-
-    private static Gson gson = new Gson();
+    public ChatController(ChatService chatService) {
+        this.gson = new Gson();
+        this.chatService = chatService;
+    }
 
     @MessageMapping("/messages/{conversationId}")
     @SendTo("/topic/messages/{conversationId}")
-    public WebSocketMessage send(@DestinationVariable String conversationId, @Payload WebSocketMessage message)
-            throws Exception {
+    public WebSocketMessage send(
+            @DestinationVariable String conversationId,
+            @Payload WebSocketMessage message) throws Exception {
         return this.chatService.sendMessageToConversation(conversationId, message);
     }
 
@@ -32,8 +32,7 @@ public class ChatController {
     @SendToUser("/queue/reply")
     public String processMessageFromClient(
             @DestinationVariable String conversationId,
-            @Payload String message,
-            Principal principal) throws Exception {
+            @Payload String message) throws Exception {
         return gson
                 .fromJson(message, WebSocketMessage.class)
                 .getFrom().toString();
