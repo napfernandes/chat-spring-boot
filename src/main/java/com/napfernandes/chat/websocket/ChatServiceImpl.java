@@ -2,6 +2,8 @@ package com.napfernandes.chat.websocket;
 
 import com.napfernandes.chat.conversation.ConversationService;
 import com.napfernandes.chat.conversation.dto.message.ConversationMessageInput;
+import com.napfernandes.chat.conversation.dto.message.ConversationMessageOutput;
+import com.napfernandes.chat.conversation.dto.message.action.MessageActionOutput;
 import com.napfernandes.chat.conversation.enums.MessageActionType;
 import com.napfernandes.chat.conversation.exception.ConversationNotFoundException;
 
@@ -19,24 +21,19 @@ public class ChatServiceImpl implements ChatService {
         public WebSocketMessage sendMessageToConversation(String conversationId, WebSocketMessage message)
                         throws ConversationNotFoundException {
 
-                var messageInput = ConversationMessageInput.builder()
-                                .userId(message.getFrom())
-                                .message(message.getContent())
-                                .build();
+                ConversationMessageInput messageInput = new ConversationMessageInput(message.getFrom(),
+                                message.getContent());
 
-                var messageOutput = this.conversationService.insertMessageToConversation(
+                ConversationMessageOutput messageOutput = this.conversationService.insertMessageToConversation(
                                 conversationId,
                                 messageInput);
 
-                var actionOfMessageSent = messageOutput.getActions().stream()
+                MessageActionOutput actionOfMessageSent = messageOutput.getActions().stream()
                                 .filter(a -> a.getActionType() == MessageActionType.MessageSent)
                                 .findFirst()
                                 .get();
 
-                return WebSocketMessage.builder()
-                                .from(messageOutput.getUserId())
-                                .content(messageOutput.getMessage())
-                                .createdAt(actionOfMessageSent.getCreatedAt())
-                                .build();
+                return new WebSocketMessage(messageOutput.getUserId(), messageOutput.getMessage(),
+                                actionOfMessageSent.getCreatedAt());
         }
 }

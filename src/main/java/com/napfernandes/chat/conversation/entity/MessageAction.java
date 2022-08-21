@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MessageAction {
     private String userId;
-
     private MessageActionType actionType;
     private LocalDateTime createdAt;
 }

@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WebSocketMessage {
     private String from;
-    private String to;
     private String content;
     private LocalDateTime createdAt;
 }

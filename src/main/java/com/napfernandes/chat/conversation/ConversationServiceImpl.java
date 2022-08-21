@@ -21,8 +21,6 @@ import com.napfernandes.chat.conversation.exception.ConversationNotFoundExceptio
 import com.napfernandes.chat.crypto.CryptoService;
 import com.napfernandes.chat.service.ValidatorService;
 
-import lombok.var;
-
 @Service
 public class ConversationServiceImpl implements ConversationService {
 
@@ -59,7 +57,7 @@ public class ConversationServiceImpl implements ConversationService {
     @Override
     public ConversationOutput getConversationByIdOrHash(String conversationIdOrHash)
             throws ConversationNotFoundException {
-        var conversation = this.conversationRepository.getByIdOrHash(conversationIdOrHash);
+        Conversation conversation = this.conversationRepository.getByIdOrHash(conversationIdOrHash);
 
         if (conversation == null) {
             throw new ConversationNotFoundException(conversationIdOrHash);
@@ -72,10 +70,9 @@ public class ConversationServiceImpl implements ConversationService {
     public ConversationOutput insertConversation(ConversationInput input) {
         this.conversationInputValidator.validate(input);
 
-        var conversation = this.modelMapper.map(input, Conversation.class);
-        var formattedString = cryptoService.hashValue(String.join(",", conversation.getMembers()));
-
-        var conversationHash = this.cryptoService.hashValue(formattedString, null);
+        Conversation conversation = this.modelMapper.map(input, Conversation.class);
+        String formattedString = cryptoService.hashValue(String.join(",", conversation.getMembers()));
+        String conversationHash = this.cryptoService.hashValue(formattedString, null);
 
         conversation.setHash(conversationHash);
         conversation.setCreatedAt(LocalDateTime.now());
@@ -90,16 +87,13 @@ public class ConversationServiceImpl implements ConversationService {
             ConversationMessageInput input) throws ConversationNotFoundException {
         this.messageInputValidator.validate(input);
 
-        var message = this.modelMapper.map(input, ConversationMessage.class);
-        var messageAction = MessageAction.builder()
-                .userId(input.getUserId())
-                .actionType(MessageActionType.MessageSent)
-                .createdAt(LocalDateTime.now())
-                .build();
+        ConversationMessage message = this.modelMapper.map(input, ConversationMessage.class);
+        MessageAction messageAction = new MessageAction(input.getUserId(), MessageActionType.MessageSent,
+                LocalDateTime.now());
 
         message.addAction(messageAction);
 
-        var conversation = this.conversationRepository.getByIdOrHash(conversationIdOrHash);
+        Conversation conversation = this.conversationRepository.getByIdOrHash(conversationIdOrHash);
 
         if (conversation == null) {
             throw new ConversationNotFoundException(conversationIdOrHash);
@@ -115,13 +109,13 @@ public class ConversationServiceImpl implements ConversationService {
             MessageActionInput input) throws ConversationNotFoundException {
         this.actionInputValidator.validate(input);
 
-        var conversation = this.conversationRepository.getByIdOrHash(conversationIdOrHash);
+        Conversation conversation = this.conversationRepository.getByIdOrHash(conversationIdOrHash);
 
         if (conversation == null) {
             throw new ConversationNotFoundException(conversationIdOrHash);
         }
 
-        var action = this.modelMapper.map(input, MessageAction.class);
+        MessageAction action = this.modelMapper.map(input, MessageAction.class);
         this.conversationRepository.insertActionToMessage(conversation.getId(), messageId, action);
 
         return this.modelMapper.map(action, MessageActionOutput.class);

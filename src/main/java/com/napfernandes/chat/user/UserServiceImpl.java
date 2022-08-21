@@ -64,9 +64,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserOutput getUserById(String userId) {
-        var user = userRepository.getById(userId);
+        User user = userRepository.getById(userId);
 
         return this.modelMapper.map(user, UserOutput.class);
     }
-
 }
