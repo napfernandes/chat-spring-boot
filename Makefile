@@ -1,4 +1,5 @@
 start:
+	mvn clean package
 	docker-compose up --build -d api
 
 down:

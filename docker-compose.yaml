@@ -13,11 +13,13 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://username:shhh@chat-mongodb:27017/test?authSource=admin
       - JWT_SECRET=shhh
       - JWT_EXPIRATIONINMILLISECONDS=18000000
+      - REDIS_ADDRESS=redis://chat-redis:6379
     networks:
       - chat-network
     depends_on:
       - mongodb
       - localstack
+      - redis
 
   mongodb:
     container_name: chat-mongodb
@@ -53,6 +55,16 @@ services:
     ports:
       - "4566:4566"
       - "4567:4567"
+    networks:
+      - chat-network
+
+  redis:
+    image: bitnami/redis:6.2.1
+    container_name: chat-redis
+    environment:
+      - REDIS_PASSWORD=password
+    ports:
+      - "6379:6379"
     networks:
       - chat-network
 
