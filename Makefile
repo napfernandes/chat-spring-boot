@@ -1,6 +1,7 @@
 start:
 	mvn clean package
 	docker-compose up --build -d api
+	make logs
 
 down:
 	docker-compose down
