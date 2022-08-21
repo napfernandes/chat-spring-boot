@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.napfernandes.chat.cache.CacheService;
 import com.napfernandes.chat.conversation.dto.ConversationInput;
 import com.napfernandes.chat.conversation.dto.ConversationOutput;
 import com.napfernandes.chat.conversation.dto.message.ConversationMessageInput;
@@ -25,6 +26,7 @@ import com.napfernandes.chat.service.ValidatorService;
 public class ConversationServiceImpl implements ConversationService {
 
     private final ModelMapper modelMapper;
+    private final CacheService cacheService;
     private final CryptoService cryptoService;
     private final ConversationRepository conversationRepository;
     private final ValidatorService<MessageActionInput> actionInputValidator;
@@ -33,12 +35,14 @@ public class ConversationServiceImpl implements ConversationService {
 
     public ConversationServiceImpl(
             ModelMapper modelMapper,
+            CacheService cacheService,
             CryptoService cryptoService,
             ConversationRepository conversationRepository,
             ValidatorService<MessageActionInput> actionInputValidator,
             ValidatorService<ConversationInput> conversationInputValidator,
             ValidatorService<ConversationMessageInput> messageInputValidator) {
         this.modelMapper = modelMapper;
+        this.cacheService = cacheService;
         this.cryptoService = cryptoService;
         this.actionInputValidator = actionInputValidator;
         this.messageInputValidator = messageInputValidator;
@@ -48,15 +52,32 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public List<ConversationOutput> findAllConversations() {
-        return this.conversationRepository.findAll()
+        String cacheKey = "findAllConversations";
+
+        List<ConversationOutput> conversations = this.cacheService.getItemAsList(cacheKey, ConversationOutput.class);
+        if (conversations != null) {
+            return conversations;
+        }
+
+        conversations = this.conversationRepository.findAll()
                 .stream()
                 .map(c -> modelMapper.map(c, ConversationOutput.class))
                 .collect(Collectors.toList());
+        this.cacheService.setItem(cacheKey, conversations);
+
+        return conversations;
     }
 
     @Override
     public ConversationOutput getConversationByIdOrHash(String conversationIdOrHash)
             throws ConversationNotFoundException {
+        String cacheKey = String.format("getConversationByIdOrHash#%s", conversationIdOrHash);
+        ConversationOutput conversationOutput = this.cacheService.getItem(cacheKey, ConversationOutput.class);
+
+        if (conversationOutput != null) {
+            return conversationOutput;
+        }
+
         Conversation conversation = this.conversationRepository.getByIdOrHash(conversationIdOrHash);
 
         if (conversation == null) {
