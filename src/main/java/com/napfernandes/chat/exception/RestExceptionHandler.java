@@ -13,11 +13,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.napfernandes.chat.conversation.exception.ConversationNotFoundException;
 import com.napfernandes.chat.login.exception.InvalidCredentialsException;
 import com.napfernandes.chat.user.exception.UserAlreadyExistsException;
+import com.napfernandes.chat.user.exception.UserNotFoundException;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
     private ResponseEntity<Object> buildResponseEntity(String exceptionMessage, HttpStatus httpStatus) {
         ApiException apiException = new ApiException(exceptionMessage, httpStatus, "");
         return new ResponseEntity<>(apiException, httpStatus);
@@ -45,5 +45,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConversationNotFoundException(
             ConversationNotFoundException conversationNotFoundException) {
         return buildResponseEntity(conversationNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<Object> handleUserNotFoundException(
+            UserNotFoundException userNotFoundException) {
+        return buildResponseEntity(userNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
