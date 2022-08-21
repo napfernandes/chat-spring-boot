@@ -10,11 +10,13 @@
 	</parent>
 	<groupId>com.napfernandes</groupId>
 	<artifactId>chat</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>chat</name>
 	<description>Chat Project</description>
 	<properties>
-		<java.version>18</java.version>
+		<java.version>11</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
