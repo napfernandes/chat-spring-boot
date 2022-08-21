@@ -1,6 +1,24 @@
 version: '3'
 
 services:
+  api:
+    container_name: chat-api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8090:8090
+    environment:
+      - SERVER_PORT=8090
+      - SPRING_DATA_MONGODB_URI=mongodb://username:shhh@chat-mongodb:27017/test?authSource=admin
+      - JWT_SECRET=shhh
+      - JWT_EXPIRATIONINMILLISECONDS=18000000
+    networks:
+      - chat-network
+    depends_on:
+      - mongodb
+      - localstack
+
   mongodb:
     container_name: chat-mongodb
     image: mongo:latest
@@ -11,6 +29,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=shhh
     volumes:
       - mongodb_data_container:/data/db
+    networks:
+      - chat-network
 
   localstack:
     container_name: chat-localstack
@@ -33,6 +53,11 @@ services:
     ports:
       - "4566:4566"
       - "4567:4567"
+    networks:
+      - chat-network
 
 volumes:
   mongodb_data_container:
+
+networks:
+  chat-network:
